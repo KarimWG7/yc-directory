@@ -1,7 +1,9 @@
 import React from "react";
 import SearchForm from "../../components/SearchForm";
-import { StartupCardType } from "@/types/types";
-import StartupCard from "@/components/StartupCard";
+import StartupCard, { StartupCardType } from "@/components/StartupCard";
+import { STARTUPS_QUERY } from "@/sanity/lib/queries";
+import { sanityFetch, SanityLive } from "@/sanity/lib/live";
+import { auth } from "@/auth";
 
 const Home = async ({
   searchParams,
@@ -9,18 +11,10 @@ const Home = async ({
   searchParams: Promise<{ query?: string }>;
 }) => {
   const query = (await searchParams).query;
-  const posts: StartupCardType[] = [
-    {
-      _createdAt: new Date(),
-      views: 55,
-      author: { _id: 1, name: "karim ghanem" },
-      _id: 1,
-      description: "This is the description",
-      image: "https://picsum.photos/600/400",
-      category: "Tech",
-      title: "Nextjs",
-    },
-  ];
+  const params = { search: query || null };
+  const session = await auth();
+  const { data: posts } = await sanityFetch({ query: STARTUPS_QUERY, params });
+
   return (
     <>
       <section className="pink_container pattern">
@@ -28,7 +22,7 @@ const Home = async ({
           Pitch Your Startup, <br /> Connect With Enterpreneurs
         </h1>
         <p className="sub-heading !max-w-3xl">
-          Submit Ideas, Bote on Pitches, and Get Noticed in Virtual
+          Submit Ideas, Vote on Pitches, and Get Noticed in Virtual
           Competitions.
         </p>
         <SearchForm query={query} />
@@ -39,12 +33,15 @@ const Home = async ({
         </p>
         <ul className="mt-7 card_grid">
           {posts?.length > 0 ? (
-            posts.map((post) => <StartupCard post={post} key={post._id} />)
+            posts.map((post: StartupCardType) => (
+              <StartupCard post={post} key={post._id} />
+            ))
           ) : (
             <p className="no-results">No startups found</p>
           )}
         </ul>
       </section>
+      <SanityLive />
     </>
   );
 };

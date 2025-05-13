@@ -32,7 +32,7 @@ const Navbar = async () => {
                 </Button>
               </form>
 
-              <Link href={`/user/${session?.user.id}`}>
+              <Link href={`/user/${session?.id}`}>
                 <span className="max-sm:hidden">{session?.user?.name}</span>
               </Link>
             </>
@@ -41,7 +41,7 @@ const Navbar = async () => {
               action={async () => {
                 "use server";
 
-                await signIn("google");
+                await signIn("github");
               }}
             >
               <Button className="cursor-pointer" type="submit">
