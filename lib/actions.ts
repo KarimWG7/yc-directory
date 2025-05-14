@@ -7,7 +7,6 @@ import { writeClient } from "@/sanity/lib/write-client";
 import { Startup } from "@/sanity/types";
 
 export const createPitch = async (
-  state: any,
   form: FormData,
   pitch: string
 ): Promise<Startup & { status: "SUCCESS" | "ERROR"; error?: string }> => {

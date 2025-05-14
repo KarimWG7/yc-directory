@@ -27,7 +27,7 @@ const StartupForm = () => {
 
       await formSchema.parseAsync(formValues);
 
-      const result = await createPitch(prevState, formData, pitch);
+      const result = await createPitch(formData, pitch);
 
       if (result.status == "SUCCESS") {
         toast.success("Success", {
@@ -56,7 +56,7 @@ const StartupForm = () => {
     }
   };
 
-  const [state, formAction, isPending] = useActionState(handleSubmit, {
+  const [, formAction, isPending] = useActionState(handleSubmit, {
     error: "",
     status: "INITIAL",
   });
