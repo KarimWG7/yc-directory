@@ -17,7 +17,7 @@ export const createPitch = async (
       status: "ERROR",
     });
 
-  const { title, description, category, link } = Object.fromEntries(
+  const { title, description, category, link, image } = Object.fromEntries(
     Array.from(form).filter(([key]) => key !== "pitch")
   );
   const slug = slugify(title as string, { lower: true, strict: true });
@@ -29,6 +29,7 @@ export const createPitch = async (
       category,
       link,
       pitch,
+      image,
       slug: {
         _type: slug,
         current: slug,

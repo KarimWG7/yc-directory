@@ -4,6 +4,7 @@ import {
   PLAYLIST_BY_SLUG_QUERY,
   STARTUP_BY_ID_QUERY,
 } from "@/sanity/lib/queries";
+import { STARTUP_BY_ID_QUERYResult } from "@/types.ts";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -13,12 +14,16 @@ import React, { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import View from "@/components/View";
 import StartupCard, { StartupCardType } from "@/components/StartupCard";
+import { PLAYLIST_BY_SLUG_QUERYResult } from "@/sanity/types";
 
 const md = markdownit();
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
-  const [post, editorPicksPlaylist] = await Promise.all([
+  const [post, editorPicksPlaylist]: [
+    post: STARTUP_BY_ID_QUERYResult,
+    editorPicksPlaylist: PLAYLIST_BY_SLUG_QUERYResult,
+  ] = await Promise.all([
     client.fetch(STARTUP_BY_ID_QUERY, { id }),
     client.fetch(PLAYLIST_BY_SLUG_QUERY, {
       slug: "editor-picks",
@@ -35,8 +40,8 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
         <p className="sub-heading !max-w-5xl">{post.description}</p>
       </section>
       <section className="section_container">
-        <img
-          src={post.image || ""}
+        <Image
+          src={post?.image}
           alt="thumbnail"
           className="w-full h-auto rounded-xl"
         />
